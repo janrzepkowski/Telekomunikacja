@@ -40,28 +40,34 @@ int main() {
             }
             Wiadomosc wiadomosc(wiadomoscZPliku);
             Koder kodownik(wiadomosc);
-            ofstream wyjscie("../dane/kod.txt");
+            ofstream wyjscie("../dane/wyslane_zakodowane.txt");
+            ofstream odebrane("../dane/odebrane_zakodowane.txt");
             for (const auto& slowo : kodownik.zakoduj()) {
                 for (const auto& bit : slowo) {
                     wyjscie << bit;
+                    odebrane << bit;
                 }
-                wyjscie << endl;
             }
             wyjscie.close();
+            odebrane.close();
             cout << "Wiadomosc: " + wiadomosc.pobierzWiadomosc();
             cout << "\nZakodowana wiadomosc: " + kodownik.pobierzZakodowanaWiadomosc() + "\nZapisano do pliku kod.txt";
         } else if (wybor == 3) {
-            ifstream wejscie("../dane/kod.txt");
+            ifstream wejscie("../dane/odebrane_zakodowane.txt");
             string slowo;
             vector<vector<bool>> kodZPliku;
             while (!wejscie.eof()) {
                 getline(wejscie, slowo);
-                if (slowo.length() > 0) {
+                int length = slowo.length();
+                int position = 0;
+
+                while (length > position) {
                     kodZPliku.emplace_back();
-                    bitset<16> bity(slowo);
+                    bitset<16> bity(slowo.substr(position, 16));
                     for (int i = 15; i >= 0; --i) {
                         kodZPliku.back().push_back(bity[i]);
                     }
+                    position += 16;
                 }
             }
             wejscie.close();
