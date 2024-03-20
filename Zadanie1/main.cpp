@@ -8,6 +8,7 @@
 using namespace std;
 
 #define BEFORE_TRANSMISSION "../dane/wyslane_zakodowane.txt"
+#define ENCODED_ASCII "../dane/zakodowna_wiadomosc.txt"
 #define AFTER_TRANSMISSION "../dane/odebrane_zakodowane.txt"
 
 int main() {
@@ -46,14 +47,19 @@ int main() {
             Koder kodownik(wiadomosc);
             ofstream wyjscie(BEFORE_TRANSMISSION);
             ofstream odebrane(AFTER_TRANSMISSION);
+            ofstream zakodowane(ENCODED_ASCII);
             for (const auto& slowo : kodownik.zakoduj()) {
+                int symbol = 0;
                 for (const auto& bit : slowo) {
                     wyjscie << bit;
                     odebrane << bit;
+                    symbol = (symbol << 1) + bit;
                 }
+                zakodowane << char(symbol >> 8) << char(symbol & 0xff);
             }
             wyjscie.close();
             odebrane.close();
+            zakodowane.close();
             cout << "Wiadomosc: " + wiadomosc.pobierzWiadomosc() << "\n";
             cout << "Zakodowana wiadomosc: " + kodownik.pobierzZakodowanaWiadomosc() << "\n";
             cout << "Zapisano do pliku odebrane_zakodowane.txt\n";
