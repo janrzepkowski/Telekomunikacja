@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: tips.zadanie3.tips_zadanie3.ProgramLauncher
+

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tips.zadanie3.tips_zadanie3.UserActionController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Zadanie 3 - Telekomunikacja i przetwarzanie sygnałów" textAlignment="CENTER" wrapText="true">
+            <font>
+                <Font name="Times New Roman Bold" size="24.0" />
+            </font>
+            <padding>
+                <Insets bottom="10.0" top="10.0" />
+            </padding>
+        </Label>
+        <HBox>
+            <children>
+                <VBox>
+                    <children>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" prefWidth="300.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="25.0" prefWidth="25.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="200.0" prefHeight="200.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Tekst niezakodowany" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                    <font>
+                                        <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                </Label>
+                                <TextArea fx:id="decodedTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Wpisz lub wczytaj zawartość do zakodowania" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </TextArea>
+                                <Button fx:id="encodeTextButton" mnemonicParsing="false" onAction="#encodeText" prefHeight="40.0" prefWidth="200.0" text="Zakoduj tekst niezakodowany" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+                <VBox>
+                    <children>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="25.0" prefWidth="25.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" prefWidth="300.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="50.0" prefWidth="50.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="200.0" prefHeight="200.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Tekst zakodowany" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                    <font>
+                                        <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                </Label>
+                                <TextArea fx:id="encodedTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Wpisz lub wczytaj zawartość do odkodowania" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </TextArea>
+                                <Button fx:id="decodeTextButton" maxHeight="40.0" maxWidth="200.0" mnemonicParsing="false" onAction="#decodeText" text="Odkoduj tekst zakodowany" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <VBox alignment="TOP_CENTER">
+                    <children>
+                        <Label contentDisplay="CENTER" text="Menu wczytywania / zapisu zawartości">
+                            <font>
+                                <Font name="Times New Roman" size="18.0" />
+                            </font>
+                            <padding>
+                                <Insets bottom="10.0" top="10.0" />
+                            </padding>
+                        </Label>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="350.0" prefWidth="350.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Button fx:id="readDecodedButton" maxHeight="35.0" maxWidth="225.0" mnemonicParsing="false" onAction="#readDecodedFromAFile" prefHeight="35.0" prefWidth="225.0" text="Wczytywanie zawartości z pliku" textAlignment="CENTER" wrapText="true">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="saveDecodedButton" maxHeight="35.0" maxWidth="225.0" mnemonicParsing="false" onAction="#saveDecodedToAFile" prefHeight="35.0" prefWidth="225.0" text="Zapis zawartości do pliku" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                                <CheckBox fx:id="isBinaryContent" maxHeight="35.0" maxWidth="225.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Zawartość binarna" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </CheckBox>
+                                <CheckBox fx:id="encodedContent" maxHeight="35.0" maxWidth="225.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Zawartość zakodowana" GridPane.rowIndex="3">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </CheckBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                    <padding>
+                        <Insets left="25.0" />
+                    </padding>
+                </VBox>
+                <VBox alignment="TOP_CENTER">
+                    <children>
+                        <Label text="Menu przesyłania zawartości">
+                            <font>
+                                <Font name="Times New Roman" size="18.0" />
+                            </font>
+                            <padding>
+                                <Insets bottom="10.0" top="10.0" />
+                            </padding>
+                        </Label>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="350.0" prefWidth="350.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Button fx:id="sendToSecondHostButton" maxHeight="35.0" maxWidth="225.0" mnemonicParsing="false" onAction="#sendTextToOtherHost" prefHeight="35.0" prefWidth="225.0" text="Wyślij do innego hosta" GridPane.halignment="CENTER">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                        <Button fx:id="receiveFromSecondHost" maxHeight="35.0" maxWidth="225.0" mnemonicParsing="false" onAction="#receiveDataFromSecondHost" prefHeight="35.0" prefWidth="225.0" text="Odbierz dane z innego hosta" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font>
+                        </Button>
+                            </children>
+                        </GridPane>
+                        <Label text="Wybór funkcji programu">
+                            <VBox.margin>
+                                <Insets bottom="10.0" top="10.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font name="Times New Roman" size="18.0" />
+                            </font>
+                        </Label>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <ComboBox fx:id="chooseFunction" onAction="#changeFunction" prefHeight="35.0" prefWidth="225.0" GridPane.halignment="CENTER" />
+                                <Button fx:id="startButton" mnemonicParsing="false" onAction="#startOperation" prefHeight="35.0" prefWidth="225.0" text="Rozpocznij działanie" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishOperation" prefHeight="35.0" prefWidth="225.0" text="Zakończ działanie" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font name="Times New Roman" size="14.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <Button fx:id="authorsButton" maxHeight="40.0" maxWidth="225.0" mnemonicParsing="false" onAction="#showAuthors" prefHeight="40.0" prefWidth="225.0" text="Autorzy programu">
+            <font>
+                <Font name="Times New Roman" size="14.0" />
+            </font>
+        </Button>
+    </children>
+</VBox>
