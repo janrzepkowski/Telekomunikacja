@@ -320,6 +320,9 @@ public class UserActionController {
             occurrenceMap = huffmanCode.findOccurrenceMap(textToEncode);
             byte[] encodedText = huffmanCode.encodeWithHuffmanEncoding(textToEncode, occurrenceMap);
             encodedTextArea.setText(new String(Converter.convertAsciiToHexadecimal(encodedText), StandardCharsets.US_ASCII));
+            System.out.println("Rozmiar wiadomości do wysłania " + textToEncode.length);
+            System.out.println("Rozmiar zakodowanej wiadomości wysłanej" + encodedText.length);
+
             objectOutputStream.writeObject(occurrenceMap);
             objectOutputStream.writeObject(encodedText);
             objectOutputStream.flush();
@@ -464,6 +467,9 @@ public class UserActionController {
             } else {
                 decodedTextArea.setText(new String(decodedText, StandardCharsets.UTF_8));
             }
+            System.out.println("Rozmiar odebranej zakodowanej wiadomości " + savedContent.length);
+            System.out.println("Rozmiar odkodowanej wiadomości " + decodedText.length);
+
         } catch (IOException ioException) {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie udało się odebrać danych od klienta.");
         } catch (ClassNotFoundException cnfExc) {
