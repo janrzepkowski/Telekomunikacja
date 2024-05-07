@@ -35,6 +35,7 @@ public class UserActionController {
     private Button startButton;
     @FXML
     private Button finishButton;
+    private final FileChooser fileChooser = new FileChooser();
 
     /*
         Comment: Above attributes are used mainly for styling combo-boxes, disabling buttons
@@ -190,6 +191,9 @@ public class UserActionController {
 
     @FXML
     public void encodeText() {
+        if (decodedTextArea.getText().isEmpty()) {
+            return;
+        }
         byte[] textToEncode;
         if (isBinaryContent.isSelected()) {
             textToEncode = Converter.convertHexadecimalToAscii(decodedTextArea.getText().getBytes(StandardCharsets.US_ASCII));
@@ -213,6 +217,9 @@ public class UserActionController {
 
     @FXML
     public void decodeText() {
+        if (encodedTextArea.getText().isEmpty()) {
+            return;
+        }
         byte[] textToDecode = Converter.convertHexadecimalToAscii(encodedTextArea.getText().getBytes(StandardCharsets.US_ASCII));
         HuffmanCoding huffmanCode = new HuffmanCoding();
         byte[] decodedMessage = huffmanCode.decodeWithHuffmanEncoding(textToDecode, occurrenceMap);
@@ -233,13 +240,11 @@ public class UserActionController {
      */
 
     @FXML
-    public void readDecodedFromAFile() {
-        String pathToFile;
-        FileChooser chooseFile = new FileChooser();
-        pathToFile = chooseFile.showOpenDialog(StageSetup.getStage()).getAbsolutePath();
-        if (!pathToFile.isEmpty() && pathToFile != null) {
-            try {
-                byte[] someTextFromFile = IOManager.readBytesFromAFile(pathToFile);
+    public void readDecodedFromAFile() throws IOException {
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                byte[] someTextFromFile = fis.readAllBytes();
                 if (isBinaryContent.isSelected() && encodedContent.isSelected()) {
                     encodedTextArea.setText(new String(Converter.convertAsciiToHexadecimal(someTextFromFile), StandardCharsets.US_ASCII));
                 } else if (isBinaryContent.isSelected() && !encodedContent.isSelected()) {
@@ -251,7 +256,7 @@ public class UserActionController {
                 }
             } catch (IOManagerReadException readExc) {
                 String title = "Błąd";
-                String header = "Błąd operacji odczytu z pliku: " + pathToFile;
+                String header = "Błąd operacji odczytu z pliku: " + file.getAbsolutePath();
                 String content = readExc.getMessage();
                 throwAlert(Alert.AlertType.ERROR, title, header, content);
             }
@@ -328,6 +333,8 @@ public class UserActionController {
             objectOutputStream.flush();
         } catch (IOException ioException) {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie udało się przesłać danych do serwera.");
+        } catch (NullPointerException npExc) {
+            throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie nawiązano połączenia, gniazdo jest nullem");
         }
     }
 
@@ -474,6 +481,8 @@ public class UserActionController {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie udało się odebrać danych od klienta.");
         } catch (ClassNotFoundException cnfExc) {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie ma takiej klasy.");
+        } catch (NullPointerException npExc) {
+            throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie nawiązano połączenia, gniazdo jest nullem");
         }
     }
 }

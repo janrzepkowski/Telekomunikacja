@@ -168,13 +168,8 @@ public class HuffmanCoding {
 
     public Map<Short, Integer> findOccurrenceMap(byte[] notEncodedInputArray) {
         Map<Short, Integer> occurrenceMap = new HashMap<>();
-        for (int i = 0; i < notEncodedInputArray.length; i++) {
-            if (occurrenceMap.containsKey((short) notEncodedInputArray[i])) {
-                int prevValue = occurrenceMap.get((short) notEncodedInputArray[i]);
-                occurrenceMap.replace((short) notEncodedInputArray[i], prevValue + 1);
-            } else {
-                occurrenceMap.put((short) notEncodedInputArray[i], 1);
-            }
+        for (byte b : notEncodedInputArray) {
+            occurrenceMap.merge((short) b, 1, Integer::sum);
         }
         return occurrenceMap;
     }
