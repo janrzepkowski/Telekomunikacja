@@ -14,6 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 public class UserActionController {
@@ -101,6 +102,8 @@ public class UserActionController {
 
     // Used for decoding.
     private Map<Short, Integer> occurrenceMap;
+
+    private final int port = 50001;
 
     /*
         @ Methods:
@@ -326,8 +329,9 @@ public class UserActionController {
             byte[] encodedText = huffmanCode.encodeWithHuffmanEncoding(textToEncode, occurrenceMap);
             encodedTextArea.setText(new String(Converter.convertAsciiToHexadecimal(encodedText), StandardCharsets.US_ASCII));
             System.out.println("Rozmiar wiadomości do wysłania " + textToEncode.length);
-            System.out.println("Rozmiar zakodowanej wiadomości wysłanej" + encodedText.length);
-
+            System.out.println("Rozmiar zakodowanej wiadomości wysłanej " + encodedText.length);
+            System.out.println("Rozmiar drzewa Huffmana " + occurrenceMap.size());
+            objectOutputStream.writeObject(isBinaryContent.isSelected());
             objectOutputStream.writeObject(occurrenceMap);
             objectOutputStream.writeObject(encodedText);
             objectOutputStream.flush();
@@ -349,20 +353,24 @@ public class UserActionController {
 
     @FXML
     public void startOperation() {
+        String serverPortNumber = new String(String.valueOf(port));
         if (!serverFunctionality) {
             TextInputDialog textInput = new TextInputDialog();
             textInput.setTitle("Wprowadź dane");
             textInput.setHeaderText("Wprowadź adres IP serwera, z którym się chcesz połączyć");
             textInput.setContentText("Adres IP: ");
-            String serverIpAddress = textInput.showAndWait().get();
-            textInput = new TextInputDialog();
-            textInput.setTitle("Wprowadź dane");
-            textInput.setHeaderText("Wprowadź numer portu, na którym działa serwera, z którym się chcesz połączyć");
-            textInput.setContentText("Numer portu: ");
-            String serverPortNumber = textInput.showAndWait().get();
+            String serverIpAddress;
+            try {
+                serverIpAddress = textInput.showAndWait().get();
+            } catch (NoSuchElementException noSuchElementException) {
+                return;
+            }
+            if (serverIpAddress.isEmpty()){
+                serverIpAddress = "127.0.0.1";
+            }
 
             try {
-                clientSocket = new Socket(serverIpAddress, Integer.parseInt(serverPortNumber));
+                clientSocket = new Socket(serverIpAddress, port);
                 startButton.setDisable(true);
                 finishButton.setDisable(false);
             } catch (IOException ioException) {
@@ -371,14 +379,16 @@ public class UserActionController {
                 throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Podany numer portu tj. " + serverPortNumber + " znajduje się poza zakresem dopuszczalnych numerów portów.");
             }
         } else {
-            TextInputDialog textInput = new TextInputDialog();
-            textInput.setTitle("Wprowadź dane");
-            textInput.setHeaderText("Wprowadź dane potrzebne do nawiązania połączenia");
-            textInput.setContentText("Wprowadź numer portu, na którym będzie działać serwer: ");
-            String serverPortNumber = textInput.showAndWait().get();
-
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Połączenie");
+            alert.setHeaderText("Potwierdź rozpoczęcie nasłuchiwania");
             try {
-                serverSocket = new ServerSocket(Integer.parseInt(serverPortNumber));
+                alert.showAndWait().get();
+            } catch (NoSuchElementException noSuchElementException) {
+                return;
+            }
+            try {
+                serverSocket = new ServerSocket(port);
                 startButton.setDisable(true);
                 finishButton.setDisable(false);
                 serverSideSocket = serverSocket.accept();
@@ -464,6 +474,8 @@ public class UserActionController {
                 inputStream = clientSocket.getInputStream();
             };
             objectInputStream = new ObjectInputStream(inputStream);
+            boolean isBinary = (boolean) objectInputStream.readObject();
+            isBinaryContent.setSelected(isBinary);
             occurrenceMap = (Map<Short, Integer>) objectInputStream.readObject();
             byte[] savedContent = (byte[]) objectInputStream.readObject();
             encodedTextArea.setText(new String(Converter.convertAsciiToHexadecimal(savedContent), StandardCharsets.US_ASCII));
@@ -476,6 +488,7 @@ public class UserActionController {
             }
             System.out.println("Rozmiar odebranej zakodowanej wiadomości " + savedContent.length);
             System.out.println("Rozmiar odkodowanej wiadomości " + decodedText.length);
+            System.out.println("Rozmiar drzewa Huffmana " + occurrenceMap.size());
 
         } catch (IOException ioException) {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Nie udało się odebrać danych od klienta.");
