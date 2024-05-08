@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -257,6 +258,18 @@ public class UserActionController {
                 } else {
                     decodedTextArea.setText(new String(someTextFromFile, StandardCharsets.UTF_8));
                 }
+                if (encodedContent.isSelected()) {
+                    File mapFile = new File(file.getAbsolutePath() + ".map");
+                    String filePath = mapFile.getAbsolutePath();
+                    try {
+                        byte[] occurrenceAsByteArray = IOManager.readBytesFromAFile(filePath);
+                        ByteArrayInputStream byteIn = new ByteArrayInputStream(occurrenceAsByteArray);
+                        ObjectInputStream in = new ObjectInputStream(byteIn);
+                        occurrenceMap = (Map<Short, Integer>) in.readObject();
+                    } catch (ClassNotFoundException | IOException e){
+                        System.out.println("Błąd podczas zapisu mapy do pliku: " + mapFile.getAbsolutePath());
+                    }
+                }
             } catch (IOManagerReadException readExc) {
                 String title = "Błąd";
                 String header = "Błąd operacji odczytu z pliku: " + file.getAbsolutePath();
@@ -286,12 +299,32 @@ public class UserActionController {
             } else if (isBinaryContent.isSelected() && !encodedContent.isSelected()) {
                 textFromInput = Converter.convertHexadecimalToAscii(decodedTextArea.getText().getBytes(StandardCharsets.US_ASCII));
             } else if (!isBinaryContent.isSelected() && encodedContent.isSelected()) {
-                textFromInput = Converter.convertHexadecimalToAscii(encodedContent.getText().getBytes(StandardCharsets.US_ASCII));
+//                textFromInput = Converter.convertHexadecimalToAscii(encodedContent.getText().getBytes(StandardCharsets.US_ASCII));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Uwaga");
+                alert.setHeaderText("Nie zaznaczono zapisu binarnego");
+                alert.setContentText("Zapis zakodowanej wiadomości może przebiec niepoprawnie");
+                alert.show();
+                return;
             } else {
                 textFromInput = decodedTextArea.getText().getBytes(StandardCharsets.UTF_8);
             }
             try {
+                System.out.println(Arrays.toString(textFromInput));
                 IOManager.writeBytesToAFile(file.getAbsolutePath(), textFromInput);
+                if (encodedContent.isSelected()) {
+                    File mapFile = new File(file.getAbsolutePath() + ".map");
+                    try {
+                        mapFile.delete();
+                        mapFile.createNewFile();
+                        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+                        out.writeObject(occurrenceMap);
+                        IOManager.writeBytesToAFile(mapFile.getAbsolutePath(), byteOut.toByteArray());
+                    } catch (IOException ioExc) {
+                        System.out.println("Błąd podczas zapisu mapy do pliku: " + mapFile.getAbsolutePath());
+                    }
+                }
             } catch (IOManagerWriteException writeExc) {
                 String title = "Błąd";
                 String header = "Błąd operacji zapisu pliku: " + file.getName();
