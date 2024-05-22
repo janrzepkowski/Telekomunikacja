@@ -1,13 +1,5 @@
-/*
-Łukasz Centkowski 247638
-
-Maciej Dominiak 247644
-*/
-
-
 #include <windows.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <iostream>
 #include <limits>
@@ -122,20 +114,22 @@ short int CRC16(unsigned char *fileBuffer) {
     return tmp >> 16;
 }
 
-//FUNKCJA ODPOWIEDZIALNA ZA ODBIERANIE DANYCH - KORZYSTA Z FUNKCJI sendCOM() oraz receiveCOM()
+/**
+ * @brief This function is responsible for receiving data. It uses the sendCOM() and receiveCOM() functions.
+ */
 void receiving() {
-    unsigned char buf[3], fileBuffer[128];
+    unsigned char buf[3], fileBuffer[128]; // Buffer for received data
     //initialize(COM);
 
-    buf[0] = crc ? C : NAK; //WYSYLANIE ZNAKU NAK
+    buf[0] = crc ? C : NAK; // Send NAK signal
     sendCOM(buf, 1);
 
-
+    // Open a file in binary write mode, overwriting any existing content
     FILE *a = fopen(".a.txt", "wb"); //OTWIERANIE TRYB WB - TRYB BINARNY ORAZ NADPISYWANIE(KASUJE STARA ZAWARTOSC)
     while (true) {
         unsigned short sum, sumc;
-        receiveCOM(buf, 3); //Odebranie nagłówka bloku
-        receiveCOM(fileBuffer, 128);
+        receiveCOM(buf, 3); // Receive block header
+        receiveCOM(fileBuffer, 128); // Receive block
 
         sum = sumc = 0;
         receiveCOM((unsigned char *) &sum, crc ? 2 : 1);
@@ -149,7 +143,6 @@ void receiving() {
             sumc %= 256;
         }
 
-        //printf("%x %x \n", sum, sumc);
         if (sum != sumc) {
             buf[0] = NAK;
             sendCOM(buf, 1);
