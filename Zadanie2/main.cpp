@@ -526,19 +526,19 @@ int main() {
             break;
         }
         case 5: {
-            COM = "COM1";
+            COM = "COM5";
             break;
         }
         case 6: {
-            COM = "COM2";
+            COM = "COM6";
             break;
         }
         case 7: {
-            COM = "COM3";
+            COM = "COM7";
             break;
         }
         case 8: {
-            COM = "COM4";
+            COM = "COM8";
             break;
         }
     }
