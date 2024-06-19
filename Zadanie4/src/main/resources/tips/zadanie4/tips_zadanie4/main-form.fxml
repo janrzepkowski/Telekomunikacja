@@ -239,6 +239,7 @@
                                     <rowConstraints>
                                         <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <Button fx:id="startPlayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#startPlayingRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Odtwórz nagranie" GridPane.halignment="CENTER">
@@ -246,7 +247,12 @@
                                                 <Font name="Times New Roman" size="14.0" />
                                             </font>
                                         </Button>
-                                        <Button fx:id="finishPlayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#finishPlayingRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Zakończ odtwarzanie" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                        <Button fx:id="replayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#replayRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Odtwórz ponownie"  GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                                            <font>
+                                                <Font name="Times New Roman" size="14.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="finishPlayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#finishPlayingRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Zakończ odtwarzanie" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                             <font>
                                                 <Font name="Times New Roman" size="14.0" />
                                             </font>
