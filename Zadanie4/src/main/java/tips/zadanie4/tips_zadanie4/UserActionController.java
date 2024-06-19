@@ -37,6 +37,8 @@ public class UserActionController {
     @FXML
     private Button startPlayButton;
     @FXML
+    private Button replayButton;
+    @FXML
     private Button finishPlayButton;
     @FXML
     private Button startConnectionButton;
@@ -112,6 +114,7 @@ public class UserActionController {
 
     private ServerSocket serverGeneralSocket;
     private Socket usedSocket;
+    private String fileName;
 
     /*
         @ Method: initialize()
@@ -162,6 +165,7 @@ public class UserActionController {
         finishRecordingButton.setDisable(true);
         finishPlayButton.setDisable(true);
         endConnectionButton.setDisable(true);
+        replayButton.setDisable(true);
 
         updateAllData();
         refreshValues();
@@ -290,9 +294,11 @@ public class UserActionController {
         updateAllData();
         try {
             String fullFileName;
+            File file;
             FileChooser fileChooser = new FileChooser();
-            fullFileName = fileChooser.showSaveDialog(StageSetup.getStage()).getAbsolutePath();
-            if (fullFileName != null) {
+            file = fileChooser.showSaveDialog(StageSetup.getStage());
+            if (file != null) {
+                fullFileName = file.getAbsolutePath();
                 recordAudioManager = new RecordAudioManager(userInputSampleRate, userInputSampleSizeInBits, userInputNumberOfChannels);
                 startRecordingButton.setDisable(true);
                 finishRecordingButton.setDisable(false);
@@ -336,17 +342,24 @@ public class UserActionController {
 
     @FXML
     public void startPlayingRecordedSound() {
-        String fullFileName;
+        File file;
         FileChooser fileChooser = new FileChooser();
-        fullFileName = fileChooser.showOpenDialog(StageSetup.getStage()).getAbsolutePath();
-        if (fullFileName != null) {
-            playAudioManager = new PlayAudioManager();
+        file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            fileName = file.getAbsolutePath();
             startPlayButton.setDisable(true);
+            replayButton.setDisable(false);
             finishPlayButton.setDisable(false);
-            playAudioManager.playRecordedSound(fullFileName);
+            replayRecordedSound();
         } else {
             throwAlert(Alert.AlertType.ERROR, "Bład", "Krytyczny błąd", "Nie podano nazwy pliku");
         }
+    }
+
+    @FXML
+    public void replayRecordedSound() {
+        playAudioManager = new PlayAudioManager();
+        playAudioManager.playRecordedSound(fileName);
     }
 
     /*
@@ -362,6 +375,7 @@ public class UserActionController {
         try {
             playAudioManager.closePlayedClip();
             startPlayButton.setDisable(false);
+            replayButton.setDisable(true);
             finishPlayButton.setDisable(true);
         } catch (NullPointerException nullPtrExc) {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Odtwarzanie nagrania zostało już zakończone");
