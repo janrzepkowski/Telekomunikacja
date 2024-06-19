@@ -19,15 +19,15 @@ import java.net.Socket;
 public class UserActionController {
 
     @FXML
-    private ComboBox sampleRate;
+    private Slider sampleRate;
     @FXML
-    private ComboBox sampleSizeInBits;
+    private Slider sampleSizeInBits;
     @FXML
     private ComboBox numberOfChannels;
     @FXML
-    private ComboBox sampleRateForPlaying;
+    private Slider sampleRateForPlaying;
     @FXML
-    private ComboBox sampleSizeInBitsForPlaying;
+    private Slider sampleSizeInBitsForPlaying;
     @FXML
     private ComboBox numberOfChannelsForPlaying;
     @FXML
@@ -36,8 +36,6 @@ public class UserActionController {
     private Button finishRecordingButton;
     @FXML
     private Button startPlayButton;
-    @FXML
-    private Button replayButton;
     @FXML
     private Button finishPlayButton;
     @FXML
@@ -115,7 +113,6 @@ public class UserActionController {
     private ServerSocket serverGeneralSocket;
     private Socket usedSocket;
 
-    private String fileName;
     /*
         @ Method: initialize()
 
@@ -126,99 +123,69 @@ public class UserActionController {
 
     @FXML
     public void initialize() {
-        sampleRate.getItems().addAll("8000", "11025", "16000", "22050", "32000", "44100", "48000", "88200", "96000", "176400", "192000");
-        sampleSizeInBits.getItems().setAll("8", "16", "24", "32");
+        sampleRate.setMin(8000);
+        sampleRate.setMax(192000);
+        sampleRate.setValue(44100);
+
+        sampleSizeInBits.setMin(8);
+        sampleSizeInBits.setMax(32);
+        sampleSizeInBits.setValue(16);
+        sampleRate.valueProperty().addListener((observable, oldValue, newValue) -> {
+            refreshValueForRecording();
+        });
+
+        sampleSizeInBits.valueProperty().addListener((observable, oldValue, newValue) -> {
+            refreshValueForRecording();
+        });
+
+        // Initialize the sampleRateForPlaying slider
+        sampleRateForPlaying.setMin(8000);
+        sampleRateForPlaying.setMax(192000);
+        sampleRateForPlaying.setValue(44100);
+        sampleRateForPlaying.valueProperty().addListener((observable, oldValue, newValue) -> {
+            refreshValueForPlaying();
+        });
+
+        // Initialize the sampleSizeInBitsForPlaying slider
+        sampleSizeInBitsForPlaying.setMin(8);
+        sampleSizeInBitsForPlaying.setMax(32);
+        sampleSizeInBitsForPlaying.setValue(16);
+        sampleSizeInBitsForPlaying.valueProperty().addListener((observable, oldValue, newValue) -> {
+            refreshValueForPlaying();
+        });
+
         numberOfChannels.getItems().setAll("1", "2");
-
-        sampleRateForPlaying.getItems().addAll("8000", "11025", "16000", "22050", "32000", "44100", "48000", "88200", "96000", "176400", "192000");
-        sampleSizeInBitsForPlaying.getItems().setAll("8", "16", "24", "32");
         numberOfChannelsForPlaying.getItems().setAll("1", "2");
-
-        sampleRate.getSelectionModel().select(6);
-        sampleSizeInBits.getSelectionModel().select(1);
         numberOfChannels.getSelectionModel().select(0);
-
-        sampleRateForPlaying.getSelectionModel().select(6);
-        sampleSizeInBitsForPlaying.getSelectionModel().select(1);
         numberOfChannelsForPlaying.getSelectionModel().select(0);
 
         finishRecordingButton.setDisable(true);
         finishPlayButton.setDisable(true);
         endConnectionButton.setDisable(true);
-        replayButton.setDisable(true);
 
         updateAllData();
         refreshValues();
     }
 
-    /*
-        @ Method: updateSampleRate()
-
-        @ Parameters: None
-
-        @ Description: This method is used for updating sampleRate value. It is called by
-        updateAllData() method.
-     */
-
     private void updateSampleRate() {
-        String sampleRateInString = sampleRate.getSelectionModel().getSelectedItem().toString();
-        userInputSampleRate = Float.parseFloat(sampleRateInString);
+        userInputSampleRate = (float) sampleRate.getValue();
     }
-
-    /*
-        @ Method: updateSampleSizeInBits()
-
-        @ Parameters: None
-
-        @ Description: This method is used for updating sampleSizeInBits value. It is called by
-        updateAllData() method.
-     */
 
     private void updateSampleSizeInBits() {
-        String sampleSizeInBitsInString = sampleSizeInBits.getSelectionModel().getSelectedItem().toString();
-        userInputSampleSizeInBits = Integer.parseInt(sampleSizeInBitsInString);
+        userInputSampleSizeInBits = (int) sampleSizeInBits.getValue();
     }
-
-    /*
-        @ Method: updateNumberOfChannels()
-
-        @ Parameters: None
-
-        @ Description: This method is used for updating numberOfChannels value. It is called by
-        updateAllData() method.
-     */
 
     private void updateNumberOfChannels() {
         String numberOfChannelsInString = numberOfChannels.getSelectionModel().getSelectedItem().toString();
         userInputNumberOfChannels = Integer.parseInt(numberOfChannelsInString);
     }
 
-    /*
-        @ Method: updateSampleRateForPlaying()
-
-        @ Parameters: None
-
-        @ Description: This method is used for updating sampleRate value. It is called by
-        updateAllData() method.
-     */
-
     private void updateSampleRateForPlaying() {
-        String sampleRateInStringForPlaying = sampleRateForPlaying.getSelectionModel().getSelectedItem().toString();
-        userInputSampleRateForPlaying = Float.parseFloat(sampleRateInStringForPlaying);
+        userInputSampleRateForPlaying = (float) sampleRateForPlaying.getValue();
     }
 
-    /*
-        @ Method: updateSampleSizeInBitsForPlaying()
-
-        @ Parameters: None
-
-        @ Description: This method is used for updating sampleSizeInBits value. It is called by
-        updateAllData() method.
-     */
-
     private void updateSampleSizeInBitsForPlaying() {
-        String sampleSizeInBitsInStringForPlaying = sampleSizeInBitsForPlaying.getSelectionModel().getSelectedItem().toString();
-        userInputSampleSizeInBitsForPlaying = Integer.parseInt(sampleSizeInBitsInStringForPlaying);
+        userInputSampleSizeInBitsForPlaying = (int) sampleSizeInBitsForPlaying.getValue();
     }
 
     /*
@@ -323,11 +290,9 @@ public class UserActionController {
         updateAllData();
         try {
             String fullFileName;
-            File file;
             FileChooser fileChooser = new FileChooser();
-            file = fileChooser.showSaveDialog(StageSetup.getStage());
-            if (file != null) {
-                fullFileName = file.getAbsolutePath();
+            fullFileName = fileChooser.showSaveDialog(StageSetup.getStage()).getAbsolutePath();
+            if (fullFileName != null) {
                 recordAudioManager = new RecordAudioManager(userInputSampleRate, userInputSampleSizeInBits, userInputNumberOfChannels);
                 startRecordingButton.setDisable(true);
                 finishRecordingButton.setDisable(false);
@@ -371,24 +336,17 @@ public class UserActionController {
 
     @FXML
     public void startPlayingRecordedSound() {
-        File file;
+        String fullFileName;
         FileChooser fileChooser = new FileChooser();
-        file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            fileName = file.getAbsolutePath();
+        fullFileName = fileChooser.showOpenDialog(StageSetup.getStage()).getAbsolutePath();
+        if (fullFileName != null) {
+            playAudioManager = new PlayAudioManager();
             startPlayButton.setDisable(true);
-            replayButton.setDisable(false);
             finishPlayButton.setDisable(false);
-            replayRecordedSound();
+            playAudioManager.playRecordedSound(fullFileName);
         } else {
             throwAlert(Alert.AlertType.ERROR, "Bład", "Krytyczny błąd", "Nie podano nazwy pliku");
         }
-    }
-
-    @FXML
-    public void replayRecordedSound() {
-        playAudioManager = new PlayAudioManager();
-        playAudioManager.playRecordedSound(fileName);
     }
 
     /*
@@ -404,7 +362,6 @@ public class UserActionController {
         try {
             playAudioManager.closePlayedClip();
             startPlayButton.setDisable(false);
-            replayButton.setDisable(true);
             finishPlayButton.setDisable(true);
         } catch (NullPointerException nullPtrExc) {
             throwAlert(Alert.AlertType.ERROR, "Błąd", "Krytyczny błąd", "Odtwarzanie nagrania zostało już zakończone");
@@ -491,7 +448,7 @@ public class UserActionController {
             InputStream inputStream = usedSocket.getInputStream();
             DataInputStream dataInputStream = new DataInputStream(inputStream);
             userInputSampleSizeInBits = dataInputStream.readInt();
-            sampleSizeInBitsForPlaying.setValue(String.valueOf(userInputSampleSizeInBits));
+            sampleSizeInBitsForPlaying.setValue(userInputSampleSizeInBits);
             refreshValueForPlaying();
             soundServer = new SoundServer(userInputSampleRateForPlaying, userInputSampleSizeInBitsForPlaying, userInputNumberOfChannelsForPlaying);
             soundClient = new SoundClient(userInputSampleRate, userInputSampleSizeInBits, userInputNumberOfChannels);

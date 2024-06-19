@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="800.0" maxWidth="800.0" prefHeight="800.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tips.zadanie4.tips_zadanie4.UserActionController">
+<VBox alignment="TOP_CENTER" maxHeight="800.0" maxWidth="800.0" prefHeight="800.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tips.zadanie4.tips_zadanie4.UserActionController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -76,8 +77,8 @@
                                     </GridPane.margin>
                                 </Label>
                                 <ComboBox fx:id="numberOfChannels" prefHeight="30.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                <ComboBox fx:id="sampleRate" maxHeight="30.0" maxWidth="180.0" prefHeight="30.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <ComboBox fx:id="sampleSizeInBits" onAction="#refreshValueForRecording" prefHeight="30.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                <Slider fx:id="sampleRate" majorTickUnit="40000" max="192000" min="8000" minorTickCount="4" prefHeight="37.0" prefWidth="172.0" showTickLabels="true" showTickMarks="true" value="44100" GridPane.columnIndex="1" />
+                                <Slider fx:id="sampleSizeInBits" majorTickUnit="8" max="32" min="8" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="16" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             </children>
                         </GridPane>
                         <Label text="Opcje odtwarzania dźwięku">
@@ -123,8 +124,8 @@
                                         <Insets left="30.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <ComboBox fx:id="sampleRateForPlaying" maxHeight="30.0" maxWidth="180.0" prefHeight="30.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <ComboBox fx:id="sampleSizeInBitsForPlaying" maxHeight="30.0" maxWidth="180.0" onAction="#refreshValueForPlaying" prefHeight="30.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                <Slider fx:id="sampleRateForPlaying" majorTickUnit="40000" max="192000" min="8000" minorTickCount="4" prefHeight="37.0" prefWidth="172.0" showTickLabels="true" showTickMarks="true" value="44100" GridPane.columnIndex="1" />
+                                <Slider fx:id="sampleSizeInBitsForPlaying" majorTickUnit="8" max="32" min="8" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="16" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                 <ComboBox fx:id="numberOfChannelsForPlaying" maxHeight="30.0" maxWidth="180.0" prefHeight="30.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
@@ -239,7 +240,6 @@
                                     <rowConstraints>
                                         <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <Button fx:id="startPlayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#startPlayingRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Odtwórz nagranie" GridPane.halignment="CENTER">
@@ -247,19 +247,14 @@
                                                 <Font name="Times New Roman" size="14.0" />
                                             </font>
                                         </Button>
-                                        <Button fx:id="replayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#replayRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Odtwórz ponownie"  GridPane.rowIndex="1" GridPane.halignment="CENTER">
-                                            <font>
-                                                <Font name="Times New Roman" size="14.0" />
-                                            </font>
-                                        </Button>
-                                        <Button fx:id="finishPlayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#finishPlayingRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Zakończ odtwarzanie" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                        <Button fx:id="finishPlayButton" maxHeight="30.0" maxWidth="180.0" mnemonicParsing="false" onAction="#finishPlayingRecordedSound" prefHeight="30.0" prefWidth="180.0" text="Zakończ odtwarzanie" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                             <font>
                                                 <Font name="Times New Roman" size="14.0" />
                                             </font>
                                         </Button>
                                     </children>
                                 </GridPane>
-                                <Label text="Zarządzenia połączeniem z innymhostem" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
+                                <Label text="Zarządzenia połączeniem z innym hostem" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
                                     <font>
                                         <Font name="Times New Roman" size="14.0" />
                                     </font>
