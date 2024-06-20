@@ -40,10 +40,10 @@ public class UserActionController {
     private Button replayButton;
     @FXML
     private Button finishPlayButton;
-    @FXML
-    private Button startConnectionButton;
-    @FXML
-    private Button endConnectionButton;
+//    @FXML
+//    private Button startConnectionButton;
+//    @FXML
+//    private Button endConnectionButton;
     @FXML
     private TextField valueForRecording;
     @FXML
@@ -164,7 +164,7 @@ public class UserActionController {
 
         finishRecordingButton.setDisable(true);
         finishPlayButton.setDisable(true);
-        endConnectionButton.setDisable(true);
+//        endConnectionButton.setDisable(true);
         replayButton.setDisable(true);
 
         updateAllData();
@@ -421,25 +421,25 @@ public class UserActionController {
         informing about this fact.
      */
 
-    @FXML
-    public void clientFunctionInit() {
-        TextInputDialog textInput = new TextInputDialog();
-        textInput.setTitle("Wprowadź dane");
-        textInput.setHeaderText("Wprowadź adres IP serwera, z którym się chcesz połączyć");
-        textInput.setContentText("Adres IP: ");
-        String serverIpAddress = textInput.showAndWait().get();
-        textInput = new TextInputDialog();
-        textInput.setTitle("Wprowadź dane");
-        textInput.setHeaderText("Wprowadź numer portu, na którym działa serwera, z którym się chcesz połączyć");
-        textInput.setContentText("Numer portu: ");
-        String serverPortNumber = textInput.showAndWait().get();
-        try {
-            usedSocket = new Socket(serverIpAddress, Integer.parseInt(serverPortNumber));
-            showPupUpWindow("Połączono", "Udało się nawiązać połączenie!");
-        } catch(IOException ioException) {
-            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd!", "Powód: " + ioException.getMessage());
-        }
-    }
+//    @FXML
+//    public void clientFunctionInit() {
+//        TextInputDialog textInput = new TextInputDialog();
+//        textInput.setTitle("Wprowadź dane");
+//        textInput.setHeaderText("Wprowadź adres IP serwera, z którym się chcesz połączyć");
+//        textInput.setContentText("Adres IP: ");
+//        String serverIpAddress = textInput.showAndWait().get();
+//        textInput = new TextInputDialog();
+//        textInput.setTitle("Wprowadź dane");
+//        textInput.setHeaderText("Wprowadź numer portu, na którym działa serwera, z którym się chcesz połączyć");
+//        textInput.setContentText("Numer portu: ");
+//        String serverPortNumber = textInput.showAndWait().get();
+//        try {
+//            usedSocket = new Socket(serverIpAddress, Integer.parseInt(serverPortNumber));
+//            showPupUpWindow("Połączono", "Udało się nawiązać połączenie!");
+//        } catch(IOException ioException) {
+//            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd!", "Powód: " + ioException.getMessage());
+//        }
+//    }
 
     /*
         @ Method: startConnection
@@ -452,34 +452,34 @@ public class UserActionController {
         it takes microphone input from one side and transmit it to the other side.
      */
 
-    @FXML
-    private void startConnection() {
-        try {
-            OutputStream outputStream = usedSocket.getOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            dataOutputStream.writeInt(userInputSampleSizeInBits);
-            Thread.sleep(1000);
-            InputStream inputStream = usedSocket.getInputStream();
-            DataInputStream dataInputStream = new DataInputStream(inputStream);
-            userInputSampleSizeInBits = dataInputStream.readInt();
-            sampleSizeInBitsForPlaying.setValue(userInputSampleSizeInBits);
-            refreshValueForPlaying();
-            soundServer = new SoundServer(userInputSampleRateForPlaying, userInputSampleSizeInBitsForPlaying, userInputNumberOfChannelsForPlaying);
-            soundClient = new SoundClient(userInputSampleRate, userInputSampleSizeInBits, userInputNumberOfChannels);
-            soundClient.startSoundSending(usedSocket.getOutputStream());
-            soundServer.startSoundReceiving(usedSocket.getInputStream());
-            startConnectionButton.setDisable(true);
-            endConnectionButton.setDisable(false);
-        } catch (TargetDataLineException targetDataLineException) {
-            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", targetDataLineException.getMessage());
-        } catch (SourceDataLineException sourceDataLineException) {
-            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", sourceDataLineException.getMessage());
-        } catch (IOException ioException) {
-            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", "Powód: " + ioException.getMessage());
-        } catch(Exception exception) {
-            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", "Powód: " + exception.getMessage());
-        }
-    }
+//    @FXML
+//    private void startConnection() {
+//        try {
+//            OutputStream outputStream = usedSocket.getOutputStream();
+//            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+//            dataOutputStream.writeInt(userInputSampleSizeInBits);
+//            Thread.sleep(1000);
+//            InputStream inputStream = usedSocket.getInputStream();
+//            DataInputStream dataInputStream = new DataInputStream(inputStream);
+//            userInputSampleSizeInBits = dataInputStream.readInt();
+//            sampleSizeInBitsForPlaying.setValue(userInputSampleSizeInBits);
+//            refreshValueForPlaying();
+//            soundServer = new SoundServer(userInputSampleRateForPlaying, userInputSampleSizeInBitsForPlaying, userInputNumberOfChannelsForPlaying);
+//            soundClient = new SoundClient(userInputSampleRate, userInputSampleSizeInBits, userInputNumberOfChannels);
+//            soundClient.startSoundSending(usedSocket.getOutputStream());
+//            soundServer.startSoundReceiving(usedSocket.getInputStream());
+//            startConnectionButton.setDisable(true);
+//            endConnectionButton.setDisable(false);
+//        } catch (TargetDataLineException targetDataLineException) {
+//            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", targetDataLineException.getMessage());
+//        } catch (SourceDataLineException sourceDataLineException) {
+//            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", sourceDataLineException.getMessage());
+//        } catch (IOException ioException) {
+//            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", "Powód: " + ioException.getMessage());
+//        } catch(Exception exception) {
+//            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", "Powód: " + exception.getMessage());
+//        }
+//    }
 
     /*
         @ Method: startConnection
@@ -492,21 +492,21 @@ public class UserActionController {
         hear anything from each other.
      */
 
-    @FXML
-    public void endConnection() {
-        try {
-            soundServer.stopSoundReceiving();
-            soundClient.stopSoundSending();
-            usedSocket.close();
-            if (serverGeneralSocket != null) {
-                serverGeneralSocket.close();
-            }
-        } catch(IOException ioException) {
-            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", "Powód: " + ioException.getMessage());
-        }
-        startConnectionButton.setDisable(false);
-        endConnectionButton.setDisable(true);
-    }
+//    @FXML
+//    public void endConnection() {
+//        try {
+//            soundServer.stopSoundReceiving();
+//            soundClient.stopSoundSending();
+//            usedSocket.close();
+//            if (serverGeneralSocket != null) {
+//                serverGeneralSocket.close();
+//            }
+//        } catch(IOException ioException) {
+//            throwAlert(Alert.AlertType.ERROR, "Błąd", "Wystąpił błąd", "Powód: " + ioException.getMessage());
+//        }
+//        startConnectionButton.setDisable(false);
+//        endConnectionButton.setDisable(true);
+//    }
 
     @FXML
     public void refreshValues() {
