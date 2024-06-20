@@ -298,8 +298,8 @@ public class UserActionController {
             FileChooser fileChooser = new FileChooser();
             file = fileChooser.showSaveDialog(StageSetup.getStage());
             if (file != null) {
-                fullFileName = file.getAbsolutePath();
-                recordAudioManager = new RecordAudioManager(userInputSampleRate, userInputSampleSizeInBits, userInputNumberOfChannels);
+                fullFileName = file.getAbsolutePath(); // userInputSampleSizeInBits should be 16
+                recordAudioManager = new RecordAudioManager(userInputSampleRate, 16, userInputNumberOfChannels);
                 startRecordingButton.setDisable(true);
                 finishRecordingButton.setDisable(false);
                 recordAudioManager.recordSound(fullFileName);
